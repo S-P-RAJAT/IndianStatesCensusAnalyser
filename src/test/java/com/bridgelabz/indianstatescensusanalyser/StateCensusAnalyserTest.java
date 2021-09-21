@@ -6,6 +6,7 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 public class StateCensusAnalyserTest {
+    public static final String CSV_FILE_WITHOUT_HEADER = "/home/rajatsp/bridgelabz/day29/assignment/IndianStatesCensusAnalyser/IndianStateCensusDataWithoutHeader.csv";
     public static final String CSV_FILE_WITH_WRONG_DELIMITER = "/home/rajatsp/bridgelabz/day29/assignment/IndianStatesCensusAnalyser/IndianStateCensusDataWithWrongDelimiter.csv";
     public static final String NOT_A_CSV_FILE = "/home/rajatsp/bridgelabz/day29/assignment/IndianStatesCensusAnalyser/new.txt";
     public static final String FILE_NOT_EXIST = "incorrectFilePath.csv";
@@ -46,5 +47,13 @@ public class StateCensusAnalyserTest {
             assertEquals(StateCensusAnalyserException.CensusException.DELIMITER_ISSUE, e.exceptionType);
         }
     }
-
+    @Test
+    public void givenCorrectCSVFile_WhenHeaderAbsent_ThrowIcorrectHeaderException() {
+        try {
+            StateCensusAnalyser stateCensusAnalyserMain = new StateCensusAnalyser();
+            stateCensusAnalyserMain.loadIndianStateCensusData(CSV_FILE_WITHOUT_HEADER);
+        } catch (StateCensusAnalyserException e) {
+            assertEquals(StateCensusAnalyserException.CensusException.INCORRECT_HEADER_PROBLEM, e.exceptionType);
+        }
+    }
 }

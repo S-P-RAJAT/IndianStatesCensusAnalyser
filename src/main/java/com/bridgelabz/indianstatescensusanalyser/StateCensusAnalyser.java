@@ -2,12 +2,15 @@ package com.bridgelabz.indianstatescensusanalyser;
 
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
+import com.opencsv.exceptions.CsvDataTypeMismatchException;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 
 import java.io.IOException;
 import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Iterator;
+import java.util.Objects;
 import java.util.stream.StreamSupport;
 
 public class StateCensusAnalyser {
@@ -32,12 +35,19 @@ public class StateCensusAnalyser {
         } catch (RuntimeException e){
             String[] s = filePath.split("[.]");
             System.out.println(s[1]);
-            if(s[1]!="csv"){
+            if(!Objects.equals(s[1], "csv")){
                 throw new StateCensusAnalyserException(StateCensusAnalyserException.CensusException.INCORRECT_TYPE_ISSUE,
                         "Incorrect File extension");
             }
+                if (e.getMessage().equalsIgnoreCase("Error capturing CSV header!")) {
+                    throw new StateCensusAnalyserException(
+                            StateCensusAnalyserException.CensusException.INCORRECT_HEADER_PROBLEM, "Incorrect Header");
+                } else {
+                    throw new StateCensusAnalyserException(
+                            StateCensusAnalyserException.CensusException.DELIMITER_ISSUE, "Incorrect Delimiter Issue");
+                }
+
 
 		}
-        return 0;
     }
 }
